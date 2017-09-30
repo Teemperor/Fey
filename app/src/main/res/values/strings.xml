@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Fey</string>
+    <string name="title_status">Status</string>
+    <string name="title_learn">Learn</string>
+    <string name="title_dicts">Dictionaries</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
