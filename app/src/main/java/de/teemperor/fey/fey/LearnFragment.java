@@ -6,6 +6,12 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.util.Random;
 
 
 /**
@@ -23,9 +29,21 @@ public class LearnFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private TextView question;
+    private Button[] answerOptions;
+
+    private int answerIndex = 0;
+
 
     public LearnFragment() {
         // Required empty public constructor
+        answerOptions = new Button[6];
+    }
+
+    private void setSymbol(Symbol s) {
+        question.setText(s.getSymbol().get(0));
+        answerIndex = new Random().nextInt(answerOptions.length);
+        answerOptions[answerIndex].setText(s.getMeanings().get(0));
     }
 
     /**
@@ -55,11 +73,43 @@ public class LearnFragment extends Fragment {
         }
     }
 
+    public void pressedAnswer(int index) {
+        if (index == answerIndex) {
+            setSymbol(SymbolDict.singleton.getRandom());
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_learn, container, false);
+        View view = inflater.inflate(R.layout.fragment_learn, container, false);
+
+        question = (TextView) view.findViewById(R.id.textView);
+        answerOptions[0] = (Button) view.findViewById(R.id.button1);
+        answerOptions[1] = (Button) view.findViewById(R.id.button2);
+        answerOptions[2] = (Button) view.findViewById(R.id.button3);
+        answerOptions[3] = (Button) view.findViewById(R.id.button4);
+        answerOptions[4] = (Button) view.findViewById(R.id.button5);
+        answerOptions[5] = (Button) view.findViewById(R.id.button6);
+
+        int j = 0;
+        for (Button b : answerOptions) {
+            b.setMaxWidth(b.getWidth());
+            b.setMaxHeight(b.getHeight());
+            final int i = j;
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    pressedAnswer(i);
+                }
+            });
+            j++;
+        }
+
+        setSymbol(SymbolDict.singleton.getRandom());
+
+        return view;
     }
 
 }

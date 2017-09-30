@@ -10,12 +10,15 @@ class Entry:
         self.freq = None
 
     def print(self):
-        print("ENTRY")
-        print("FREQ:" + str(self.freq))
+        if self.freq is None or len(self.symbols) == 0 or len(self.meanings) == 0:
+            return
+
+        print("E")
+        print("F:" + str(self.freq))
         for s in self.symbols:
-            print("SYM:" + s)
+            print("S:" + s)
         for m in self.meanings:
-            print("TRA:" + m)
+            print("T:" + m)
 
 def parse_entry(ele):
     global max_freq
@@ -47,4 +50,4 @@ for entry in root:
     if entry.tag == "entry":
         parse_entry(entry)
 
-print(max_freq)
+#print(max_freq)
