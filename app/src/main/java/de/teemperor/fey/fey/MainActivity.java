@@ -1,5 +1,6 @@
 package de.teemperor.fey.fey;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -22,21 +23,22 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            mContent.removeAllViews();
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Fragment fragment = null;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    return true;
-                case R.id.navigation_dashboard:
-                    mContent.removeAllViews();
-                    FragmentManager fragmentManager = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    LearnFragment fragment = LearnFragment.newInstance("a", "b");
-                    fragmentTransaction.add(R.id.content, fragment);
-                    fragmentTransaction.commit();
-                    return true;
+                    fragment = InfoFragment.newInstance("a", "b");
+                    break;
                 case R.id.navigation_notifications:
-                    return true;
+                case R.id.navigation_dashboard:
+                    fragment = LearnFragment.newInstance("a", "b");
+                    break;
             }
-            return false;
+            fragmentTransaction.add(R.id.content, fragment);
+            fragmentTransaction.commit();
+            return true;
         }
 
     };
