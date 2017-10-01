@@ -1,19 +1,19 @@
 package de.teemperor.fey.fey;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class Symbol {
 
-
-    private List<String> meanings;
-    private double frequency;
     private List<String> symbol;
+    private List<String> meanings;
+    private List<String> readings;
+    private double frequency;
 
-    public Symbol(List<String> symbol, List<String> meanings, double frequency) {
+    public Symbol(List<String> symbol, List<String> meanings, List<String> readings, double frequency) {
         this.symbol = symbol;
         this.meanings = meanings;
         this.frequency = frequency;
+        this.readings = readings;
     }
 
     public List<String> getMeanings() {
@@ -26,5 +26,9 @@ public class Symbol {
 
     public List<String> getSymbol() {
         return symbol;
+    }
+
+    public List<String> getReadings() {
+        return readings;
     }
 }

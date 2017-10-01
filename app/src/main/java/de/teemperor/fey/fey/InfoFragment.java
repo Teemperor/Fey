@@ -46,6 +46,7 @@ public class InfoFragment extends Fragment {
         String symbolText = joinString(", ", r.getSymbol());
         symbol.setText(symbolText);
         meanings.setText("• " + joinString("\n• ", r.getMeanings()));
+        readings.setText("• " + joinString("\n• ", r.getReadings()));
     }
 
     /**

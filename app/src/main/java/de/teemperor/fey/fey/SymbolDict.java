@@ -31,23 +31,26 @@ public class SymbolDict {
 
     public void parse(InputStream stream) {
         BufferedReader in = new BufferedReader(new InputStreamReader(stream));
-        String line = null;
+        String line;
 
-        boolean first = true;
         List<String> symbols = null;
         List<String> translations = null;
+        List<String> readings = null;
         double freq = 0;
         try {
             while((line = in.readLine()) != null) {
                 if (line.equals("E")) {
                     if (symbols != null)
-                        addSymbol(new Symbol(symbols, translations, freq));
+                        addSymbol(new Symbol(symbols, translations, readings, freq));
                     symbols = new ArrayList<String>();
                     translations = new ArrayList<String>();
+                    readings = new ArrayList<String>();
                 } else if (line.startsWith("S:")) {
                     symbols.add(line.substring("S:".length()));
                 } else if (line.startsWith("T:")) {
                     translations.add(line.substring("T:".length()));
+                } else if (line.startsWith("R:")) {
+                    readings.add(line.substring("R:".length()));
                 } else if (line.startsWith("F:")) {
                     freq = Double.parseDouble(line.substring("F:".length()));
                 } else {

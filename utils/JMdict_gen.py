@@ -9,6 +9,7 @@ class Entry:
         self.seq = seq
         self.symbols = []
         self.meanings = []
+        self.readings = []
         self.freq = None
 
     def print(self):
@@ -21,6 +22,8 @@ class Entry:
             print("S:" + s)
         for m in self.meanings:
             print("T:" + m)
+        for m in self.readings:
+            print("R:" + m)
 
 def parse_entry(ele):
     global max_freq
@@ -34,8 +37,12 @@ def parse_entry(ele):
                     e.symbols.append(child2.text)
                 if child2.tag == "ke_pri":
                     t = child2.text
-                    if t.startswith("nf"):
+                    if t.startswith("nf") and e.freq is None:
                         e.freq = int(t[2:])
+        elif child.tag == "r_ele":
+            for child2 in child:
+                if child2.tag == "reb":
+                    e.readings.append(child2.text)
         elif child.tag == "sense":
             for child2 in child:
                 if child2.tag == "gloss":
