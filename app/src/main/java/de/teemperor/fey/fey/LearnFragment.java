@@ -37,6 +37,8 @@ public class LearnFragment extends Fragment {
     private int answerIndex = 0;
     private int textColorOriginal = 0;
     private boolean displayingAnswer = false;
+    private int rightColor = Color.parseColor("#27d500");
+    private int wrongColor = Color.parseColor("#d50003");
 
     public LearnFragment() {
         // Required empty public constructor
@@ -48,6 +50,7 @@ public class LearnFragment extends Fragment {
         question.setText(s.getSymbol().get(0));
         answerIndex = new Random().nextInt(answerOptions.length);
         answerOptions[answerIndex].setText(s.getMeanings().get(0));
+        question.setTextColor(textColorOriginal);
 
         for (Button b : answerOptions) {
             b.setEnabled(true);
@@ -55,14 +58,7 @@ public class LearnFragment extends Fragment {
         }
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LearnFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
     public static LearnFragment newInstance(String param1, String param2) {
         LearnFragment fragment = new LearnFragment();
@@ -86,13 +82,15 @@ public class LearnFragment extends Fragment {
         boolean correct = index == answerIndex;;
         displayingAnswer = true;
 
-        answerOptions[answerIndex].setTextColor(Color.parseColor("#27d500"));
+        answerOptions[answerIndex].setTextColor(rightColor);
+        question.setTextColor(correct ? rightColor : wrongColor);
+
         if (index == answerIndex) {
             for (Button b : answerOptions) {
                 b.setEnabled(false);
             }
         } else {
-            answerOptions[index].setTextColor(Color.parseColor("#d50003"));
+            answerOptions[index].setTextColor(wrongColor);
         }
 
         final Handler handler = new Handler();
@@ -110,7 +108,7 @@ public class LearnFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_learn, container, false);
 
-        question = (TextView) view.findViewById(R.id.textView);
+        question = (TextView) view.findViewById(R.id.questionText);
         answerOptions[0] = (Button) view.findViewById(R.id.button1);
         answerOptions[1] = (Button) view.findViewById(R.id.button2);
         answerOptions[2] = (Button) view.findViewById(R.id.button3);
