@@ -1,8 +1,10 @@
 package de.teemperor.fey.fey;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +35,8 @@ public class LearnFragment extends Fragment {
     private Button[] answerOptions;
 
     private int answerIndex = 0;
-
+    private int textColorOriginal = 0;
+    private boolean displayingAnswer = false;
 
     public LearnFragment() {
         // Required empty public constructor
@@ -41,9 +44,15 @@ public class LearnFragment extends Fragment {
     }
 
     private void setSymbol(Symbol s) {
+        displayingAnswer = false;
         question.setText(s.getSymbol().get(0));
         answerIndex = new Random().nextInt(answerOptions.length);
         answerOptions[answerIndex].setText(s.getMeanings().get(0));
+
+        for (Button b : answerOptions) {
+            b.setEnabled(true);
+            b.setTextColor(textColorOriginal);
+        }
     }
 
     /**
@@ -74,9 +83,25 @@ public class LearnFragment extends Fragment {
     }
 
     public void pressedAnswer(int index) {
+        boolean correct = index == answerIndex;;
+        displayingAnswer = true;
+
+        answerOptions[answerIndex].setTextColor(Color.parseColor("#27d500"));
         if (index == answerIndex) {
-            setSymbol(SymbolDict.singleton.getRandom());
+            for (Button b : answerOptions) {
+                b.setEnabled(false);
+            }
+        } else {
+            answerOptions[index].setTextColor(Color.parseColor("#d50003"));
         }
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setSymbol(SymbolDict.singleton.getRandom());
+            }
+        }, correct ? 500 : 2500);
     }
 
     @Override
@@ -93,6 +118,8 @@ public class LearnFragment extends Fragment {
         answerOptions[4] = (Button) view.findViewById(R.id.button5);
         answerOptions[5] = (Button) view.findViewById(R.id.button6);
 
+        textColorOriginal = answerOptions[0].getCurrentTextColor();
+
         int j = 0;
         for (Button b : answerOptions) {
             b.setMaxWidth(b.getWidth());
@@ -101,7 +128,8 @@ public class LearnFragment extends Fragment {
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    pressedAnswer(i);
+                    if(!displayingAnswer)
+                        pressedAnswer(i);
                 }
             });
             j++;

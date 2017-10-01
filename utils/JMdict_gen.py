@@ -2,6 +2,8 @@
 
 max_freq = 0
 
+entries = []
+
 class Entry:
     def __init__(self, seq):
         self.seq = seq
@@ -22,6 +24,7 @@ class Entry:
 
 def parse_entry(ele):
     global max_freq
+    global entries
     seq = ele.find('ent_seq').text
     e = Entry(seq)
     for child in ele:
@@ -40,7 +43,7 @@ def parse_entry(ele):
     if e.freq:
         if e.freq > max_freq:
             max_freq = e.freq
-        e.print()
+        entries.append(e)
 
 
 import xml.etree.ElementTree as ET
@@ -49,5 +52,11 @@ root = tree.getroot()
 for entry in root:
     if entry.tag == "entry":
         parse_entry(entry)
+
+entries.sort(key=lambda x: x.freq, reverse=False)
+
+for e in entries:
+    e.print()
+
 
 #print(max_freq)
