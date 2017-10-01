@@ -17,7 +17,6 @@ class Entry:
             return
 
         print("E")
-        print("F:" + str(self.freq))
         for s in self.symbols:
             print("S:" + s)
         for m in self.meanings:
@@ -62,8 +61,9 @@ for entry in root:
 
 entries.sort(key=lambda x: x.freq, reverse=False)
 
+e_printed = 0
 for e in entries:
     e.print()
-
+    e_printed+=1
 
 #print(max_freq)

@@ -38,14 +38,16 @@ public class QuizFragment extends Fragment {
     private int rightColor = Color.parseColor("#27d500");
     private int wrongColor = Color.parseColor("#d50003");
 
+    private Symbol symbolToSet;
+
     public QuizFragment() {
         // Required empty public constructor
         answerOptions = new Button[6];
     }
 
-    private void setSymbol(Symbol s) {
+    public void setSymbol(Symbol s) {
         displayingAnswer = false;
-        question.setText(s.getSymbol().get(0));
+        question.setText(s.getSymbols().get(0));
         answerIndex = new Random().nextInt(answerOptions.length);
         answerOptions[answerIndex].setText(s.getMeanings().get(0));
         question.setTextColor(textColorOriginal);
@@ -58,11 +60,12 @@ public class QuizFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static QuizFragment newInstance(String param1, String param2) {
+    public static QuizFragment newInstance(Symbol s) {
         QuizFragment fragment = new QuizFragment();
+        fragment.symbolToSet = s;
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, "");
+        args.putString(ARG_PARAM2, "");
         fragment.setArguments(args);
         return fragment;
     }
@@ -131,7 +134,7 @@ public class QuizFragment extends Fragment {
             j++;
         }
 
-        setSymbol(SymbolDict.singleton.getRandom());
+        setSymbol(symbolToSet);
 
         return view;
     }

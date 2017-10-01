@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.test.SyncBaseInstrumentation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,19 +28,12 @@ public class LearnFragment extends Fragment {
     private String mParam2;
 
     private LinearLayout mContent;
+    private Teacher teacher;
 
     public LearnFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LearnFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static LearnFragment newInstance(String param1, String param2) {
         LearnFragment fragment = new LearnFragment();
@@ -67,11 +61,13 @@ public class LearnFragment extends Fragment {
 
         mContent = (LinearLayout) view.findViewById(R.id.learn_container);
 
+        teacher = new Teacher();
+
         mContent.removeAllViews();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment fragment = null;
-        fragment = QuizFragment.newInstance("a", "b");
+        QuizFragment fragment = null;
+        fragment = QuizFragment.newInstance(SymbolDict.singleton.getRandom());
         fragmentTransaction.add(R.id.content, fragment);
         fragmentTransaction.commit();
 

@@ -50,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         try {
-            InputStream input = getAssets().open("dict");
-            SymbolDict.singleton = new SymbolDict();
-            SymbolDict.singleton.parse(input);
+            InputStream input = getAssets().open("joyo.csv");
+            SymbolDict.singleton = new SymbolDict("joyo");
+            SymbolDict.singleton.parseCSV(input);
         } catch (IOException e) {
             e.printStackTrace();
         }

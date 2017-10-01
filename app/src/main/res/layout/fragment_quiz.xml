@@ -15,10 +15,11 @@
             android:id="@+id/questionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="火"
             android:gravity="center"
             android:padding="10dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+            android:text="火"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="36sp" />
 
         <TableLayout
             android:layout_width="match_parent"
