@@ -29,7 +29,7 @@ public class TeacherTest {
             assertTrue(s.getProficiency() <= 0.01);
         }
 
-        for (int i = 0; i < 20000; i++) {
+        for (int i = 0; i < 10; i++) {
             LearnTask task = teacher.nextTask();
             if (task.getSymbolToLearn() != null) {
                 Symbol s = task.getSymbolToLearn();
