@@ -6,7 +6,7 @@ public class Teacher {
 
     }
 
-    public Question getQuestion() {
-        return new Question("foo", null);
+    public LearnTask nextTask() {
+        return new LearnTask(SymbolDict.singleton.getRandom());
     }
 }

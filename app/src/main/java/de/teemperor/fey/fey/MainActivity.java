@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                     fragment = InfoFragment.newInstance("a", "b");
                     break;
                 case R.id.navigation_learn:
-                    fragment = QuizFragment.newInstance("a", "b");
+                    fragment = LearnFragment.newInstance("a", "b");
                     break;
                 case R.id.navigation_settings:
                     fragment = SettingsFragment.newInstance("a", "b");
