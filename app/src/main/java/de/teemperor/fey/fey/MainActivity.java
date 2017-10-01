@@ -9,7 +9,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,12 +27,14 @@ public class MainActivity extends AppCompatActivity {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment fragment = null;
             switch (item.getItemId()) {
-                case R.id.navigation_home:
+                case R.id.navigation_dict:
                     fragment = InfoFragment.newInstance("a", "b");
                     break;
-                case R.id.navigation_notifications:
-                case R.id.navigation_dashboard:
+                case R.id.navigation_learn:
                     fragment = LearnFragment.newInstance("a", "b");
+                    break;
+                case R.id.navigation_settings:
+                    fragment = SettingsFragment.newInstance("a", "b");
                     break;
             }
             fragmentTransaction.add(R.id.content, fragment);
