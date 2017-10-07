@@ -10,9 +10,9 @@ import static org.junit.Assert.*;
 
 public class TeacherTest {
 
-    @Test
-    public void testDict() throws Exception {
+    public SymbolDict makeTestDict() {
         SymbolDict dict = new SymbolDict("test");
+
         for (int i = 0; i < 20; i++)
         {
             String number = i < 10 ? "0" + i : "" + i;
@@ -22,12 +22,25 @@ public class TeacherTest {
             dict.addSymbol(new Symbol(i, symbols, meanings, readings));
         }
 
+        return dict;
+    }
+
+    @Test
+    public void testInitialProficiency() throws Exception {
+        SymbolDict dict = makeTestDict();
         Teacher teacher = new Teacher();
         teacher.setDict(dict);
 
         for (Teacher.LearningSymbol s : teacher.getSymbols()) {
             assertTrue(s.getProficiency() <= 0.01);
         }
+    }
+
+    @Test
+    public void testDict() throws Exception {
+        SymbolDict dict = makeTestDict();
+        Teacher teacher = new Teacher();
+        teacher.setDict(dict);
 
         for (int i = 0; i < 20000; i++) {
             LearnTask task = teacher.nextTask();
