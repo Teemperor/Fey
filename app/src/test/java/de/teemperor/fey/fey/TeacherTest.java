@@ -25,6 +25,22 @@ public class TeacherTest {
         return dict;
     }
 
+    public int getCorrectIndex(Question q) {
+        assertTrue(q.getQuestion().startsWith("symbol"));
+        String number = q.getQuestion().substring("symbol".length());
+        int answerIndex = 0;
+        int foundAnswerIndex = -1;
+        for (String answer : q.getAnswers()) {
+            if (answer.endsWith(number)) {
+                assertEquals(foundAnswerIndex, -1);
+                foundAnswerIndex = answerIndex;
+            }
+            answerIndex++;
+        }
+        assertNotEquals(foundAnswerIndex, -1);
+        return foundAnswerIndex;
+    }
+
     @Test
     public void testInitialProficiency() throws Exception {
         SymbolDict dict = makeTestDict();
@@ -51,19 +67,8 @@ public class TeacherTest {
                 assertTrue(s.getMeanings().get(0).startsWith("meaning"));
             } else if (task.getQuestion() != null) {
                 Question q = task.getQuestion();
-                assertTrue(q.getQuestion().startsWith("symbol"));
-                String number = q.getQuestion().substring("symbol".length());
-                int answerIndex = 0;
-                int foundAnswerIndex = -1;
-                for (String answer : q.getAnswers()) {
-                    if (answer.endsWith(number)) {
-                        assertEquals(foundAnswerIndex, -1);
-                        foundAnswerIndex = answerIndex;
-                    }
-                    answerIndex++;
-                }
-                assertNotEquals(foundAnswerIndex, -1);
-                assertTrue(q.answer(foundAnswerIndex));
+                int answer = getCorrectIndex(q);
+                assertTrue(q.answer(answer));
             } else {
                 fail("Wasn't a question or a symbol to learn");
             }
