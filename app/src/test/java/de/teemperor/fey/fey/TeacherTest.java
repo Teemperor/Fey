@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 public class TeacherTest {
 
-    public SymbolDict makeTestDict() {
+    private SymbolDict makeTestDict() {
         SymbolDict dict = new SymbolDict("test");
 
         for (int i = 0; i < 20; i++)
@@ -25,7 +25,7 @@ public class TeacherTest {
         return dict;
     }
 
-    public int getCorrectIndex(Question q) {
+    private int getCorrectIndex(Question q) {
         assertTrue(q.getQuestion().startsWith("symbol"));
         String number = q.getQuestion().substring("symbol".length());
         int answerIndex = 0;
@@ -41,6 +41,31 @@ public class TeacherTest {
         return foundAnswerIndex;
     }
 
+    private int getWrongIndex(Question q) {
+        int answer = getCorrectIndex(q);
+        if (answer == 0)
+            return 1;
+        else
+            return 0;
+    }
+
+    private void handleTask(LearnTask task, boolean answerCorrect) {
+        if (task.getSymbolToLearn() != null) {
+            Symbol s = task.getSymbolToLearn();
+            assertTrue(s.getSymbols().get(0).startsWith("symbol"));
+            assertTrue(s.getReadings().get(0).startsWith("reading"));
+            assertTrue(s.getMeanings().get(0).startsWith("meaning"));
+        } else if (task.getQuestion() != null) {
+            Question q = task.getQuestion();
+            if (answerCorrect)
+                assertTrue(q.answer(getCorrectIndex(q)));
+            else
+                assertFalse(q.answer(getWrongIndex(q)));
+        } else {
+            fail("Wasn't a question or a symbol to learn");
+        }
+    }
+
     @Test
     public void testInitialProficiency() throws Exception {
         SymbolDict dict = makeTestDict();
@@ -53,28 +78,38 @@ public class TeacherTest {
     }
 
     @Test
-    public void testDict() throws Exception {
+    public void testLearningProgress() throws Exception {
         SymbolDict dict = makeTestDict();
         Teacher teacher = new Teacher();
         teacher.setDict(dict);
 
         for (int i = 0; i < 20000; i++) {
-            LearnTask task = teacher.nextTask();
-            if (task.getSymbolToLearn() != null) {
-                Symbol s = task.getSymbolToLearn();
-                assertTrue(s.getSymbols().get(0).startsWith("symbol"));
-                assertTrue(s.getReadings().get(0).startsWith("reading"));
-                assertTrue(s.getMeanings().get(0).startsWith("meaning"));
-            } else if (task.getQuestion() != null) {
-                Question q = task.getQuestion();
-                int answer = getCorrectIndex(q);
-                assertTrue(q.answer(answer));
-            } else {
-                fail("Wasn't a question or a symbol to learn");
-            }
+            handleTask(teacher.nextTask(), true);
+        }
+        for (Teacher.LearningSymbol s : teacher.getSymbols()) {
+            assertTrue(s.getSymbol().getSymbols().get(0) + ":" + s.getProficiency(), s.getProficiency() >= 0.99);
+        }
+    }
+
+    @Test
+    public void testLearningRegress() throws Exception {
+        SymbolDict dict = makeTestDict();
+        Teacher teacher = new Teacher();
+        teacher.setDict(dict);
+
+        for (int i = 0; i < 20000; i++) {
+            handleTask(teacher.nextTask(), true);
         }
         for (Teacher.LearningSymbol s : teacher.getSymbols()) {
             assertTrue(s.getProficiency() >= 1);
+        }
+
+        for (int i = 0; i < 20000; i++) {
+            handleTask(teacher.nextTask(), false);
+        }
+
+        for (Teacher.LearningSymbol s : teacher.getSymbols()) {
+            assertTrue(s.getSymbol().getSymbols().get(0) + ":" + s.getProficiency(), s.getProficiency() <= 0.1);
         }
     }
 }
