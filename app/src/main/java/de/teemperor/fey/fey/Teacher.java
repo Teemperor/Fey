@@ -10,6 +10,7 @@ public class Teacher {
 
     private ArrayList<LearningSymbol> symbols;
     private HashMap<Symbol, LearningSymbol> symbolToLearning = new HashMap<>();
+    private LearningSymbol lastLearned = null;
 
 
     public class LearningSymbol {
@@ -40,6 +41,8 @@ public class Teacher {
         public void giveFeedback(boolean correct) {
             if (correct) {
                 proficiency += 0.1f;
+                if (proficiency > 1)
+                    proficiency = 1;
             } else {
                 proficiency /= 2;
             }
@@ -56,6 +59,7 @@ public class Teacher {
             symbols.add(ls = new LearningSymbol(s));
             symbolToLearning.put(s, ls);
         }
+        lastLearned = symbols.get(symbols.size() - 1);
     }
 
     private Random random = new Random(2271694);
@@ -110,16 +114,44 @@ public class Teacher {
                 break;
         }
 
+        ArrayList<LearningSymbol> possibleSymbols = new ArrayList<>();
+        ArrayList<Integer> weights = new ArrayList<>();
+        int weightSum = 0;
+
         for (LearningSymbol s : symbols) {
-            if (s.getProficiency() > 1)
-                continue;
-            if (!s.isIntroduced()) {
-                s.setIntroduced(true);
-                return new LearnTask(s.getSymbol());
-            }
-            return new LearnTask(makeQuestion(s));
+            possibleSymbols.add(s);
+            int weight = (int) (s.getProficiency() * 15) + 1;
+            weightSum += weight;
+            weights.add(weight);
+            if(!s.isIntroduced())
+                break;
         }
-        int index = new Random().nextInt(symbols.size());
-        return new LearnTask(makeQuestion(symbols.get(index)));
+        int index = new Random().nextInt(weightSum);
+        for(int i = 0; i < weights.size(); i++) {
+            index -= weights.get(i);
+            if (index < 0) {
+                LearningSymbol s = possibleSymbols.get(i);
+                if (s.isIntroduced()) {
+                    Question q = makeQuestion(possibleSymbols.get(i));
+                    return new LearnTask(q);
+                } else {
+                    s.setIntroduced(true);
+                    return new LearnTask(s.getSymbol());
+                }
+            }
+        }
+        throw new RuntimeException("Run out of weights?");
+
+
+//        if (s.getProficiency() >= 1)
+//            continue;
+//        if (!s.isIntroduced()) {
+//            s.setIntroduced(true);
+//            return new LearnTask(s.getSymbol());
+//        }
+//        if (s != lastLearned) {
+//            possibleSymbols.add(s);
+//        }
+        //return new LearnTask(makeQuestion(symbols.get(index)));
     }
 }
