@@ -27,6 +27,10 @@ public class Question {
         return answers;
     }
 
+    public int getCorrectAnswer() {
+        return correctAnswer;
+    }
+
     public boolean answer(int foundAnswerIndex) {
         boolean correct = (foundAnswerIndex == correctAnswer);
         teacher.giveFeedback(checkedSymbol, correct);

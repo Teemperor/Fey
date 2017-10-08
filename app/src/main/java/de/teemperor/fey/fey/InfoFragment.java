@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -26,7 +27,10 @@ public class InfoFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private Symbol symbolToDisplay;
+
     private TextView symbol, meanings, readings;
+    private boolean showNext;
 
     public InfoFragment() {
         // Required empty public constructor
@@ -58,11 +62,13 @@ public class InfoFragment extends Fragment {
      * @return A new instance of fragment InfoFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static InfoFragment newInstance(String param1, String param2) {
+    public static InfoFragment newInstance(Symbol s, boolean showNext) {
         InfoFragment fragment = new InfoFragment();
+        fragment.symbolToDisplay = s;
+        fragment.showNext = showNext;
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, "");
+        args.putString(ARG_PARAM2, "y");
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,8 +91,19 @@ public class InfoFragment extends Fragment {
         symbol = (TextView) view.findViewById(R.id.symbol);
         meanings = (TextView) view.findViewById(R.id.meaningsText);
         readings = (TextView) view.findViewById(R.id.readingsText);
+        Button nextButton = (Button) view.findViewById(R.id.nextButton);
+        if (showNext) {
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    LearnFragment.singleton.next();
+                }
+            });
+        } else {
+            nextButton.setVisibility(View.INVISIBLE);
+        }
 
-        setSymbol(SymbolDict.singleton.getRandom());
+        setSymbol(symbolToDisplay);
 
         return view;
     }

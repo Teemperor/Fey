@@ -110,7 +110,7 @@ public class Teacher {
                 s.setIntroduced(true);
                 return new LearnTask(s.getSymbol());
             }
-            if (i >= 10)
+            if (i >= 6)
                 break;
         }
 
@@ -120,13 +120,13 @@ public class Teacher {
 
         for (LearningSymbol s : symbols) {
             possibleSymbols.add(s);
-            int weight = (int) (s.getProficiency() * 15) + 1;
+            int weight = (int) ((1 - s.getProficiency()) * 15) + 1;
             weightSum += weight;
             weights.add(weight);
             if(!s.isIntroduced())
                 break;
         }
-        int index = new Random().nextInt(weightSum);
+        int index = random.nextInt(weightSum);
         for(int i = 0; i < weights.size(); i++) {
             index -= weights.get(i);
             if (index < 0) {

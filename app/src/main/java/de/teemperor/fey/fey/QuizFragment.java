@@ -32,25 +32,25 @@ public class QuizFragment extends Fragment {
     private TextView question;
     private Button[] answerOptions;
 
-    private int answerIndex = 0;
     private int textColorOriginal = 0;
     private boolean displayingAnswer = false;
     private int rightColor = Color.parseColor("#27d500");
     private int wrongColor = Color.parseColor("#d50003");
 
-    private Symbol symbolToSet;
+    Question q;
 
     public QuizFragment() {
         // Required empty public constructor
         answerOptions = new Button[6];
     }
 
-    public void setSymbol(Symbol s) {
+    public void setQuestion(Question q) {
+        this.q = q;
         displayingAnswer = false;
-        question.setText(s.getSymbols().get(0));
-        answerIndex = new Random().nextInt(answerOptions.length);
-        answerOptions[answerIndex].setText(s.getMeanings().get(0));
-        question.setTextColor(textColorOriginal);
+        question.setText(q.getQuestion());
+        for (int i = 0; i < 6; i++) {
+            answerOptions[i].setText(q.getAnswers().get(i));
+        }
 
         for (Button b : answerOptions) {
             b.setEnabled(true);
@@ -60,9 +60,9 @@ public class QuizFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static QuizFragment newInstance(Symbol s) {
+    public static QuizFragment newInstance(Question q) {
         QuizFragment fragment = new QuizFragment();
-        fragment.symbolToSet = s;
+        fragment.q = q;
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, "");
         args.putString(ARG_PARAM2, "");
@@ -80,13 +80,13 @@ public class QuizFragment extends Fragment {
     }
 
     public void pressedAnswer(int index) {
-        boolean correct = index == answerIndex;;
+        boolean correct = q.answer(index);;
         displayingAnswer = true;
 
-        answerOptions[answerIndex].setTextColor(rightColor);
+        answerOptions[q.getCorrectAnswer()].setTextColor(rightColor);
         question.setTextColor(correct ? rightColor : wrongColor);
 
-        if (index == answerIndex) {
+        if (correct) {
             for (Button b : answerOptions) {
                 b.setEnabled(false);
             }
@@ -98,7 +98,8 @@ public class QuizFragment extends Fragment {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                setSymbol(SymbolDict.singleton.getRandom());
+                LearnFragment.singleton.next();
+                //setSymbol(SymbolDict.singleton.getRandom());
             }
         }, correct ? 500 : 2500);
     }
@@ -134,8 +135,7 @@ public class QuizFragment extends Fragment {
             j++;
         }
 
-        setSymbol(symbolToSet);
-
+        setQuestion(q);
         return view;
     }
 

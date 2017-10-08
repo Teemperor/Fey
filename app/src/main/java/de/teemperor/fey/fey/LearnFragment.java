@@ -28,10 +28,30 @@ public class LearnFragment extends Fragment {
     private String mParam2;
 
     private LinearLayout mContent;
-    private Teacher teacher;
+
+    public static LearnFragment singleton;
+    private Fragment fragment;
 
     public LearnFragment() {
         // Required empty public constructor
+        singleton = this;
+    }
+
+    public void next() {
+        mContent.removeAllViews();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (fragment != null)
+            fragmentTransaction.remove(fragment);
+
+        LearnTask l = MainActivity.teacher.nextTask();
+        if (l.getSymbolToLearn() != null) {
+            fragment = InfoFragment.newInstance(l.getSymbolToLearn(), true);
+        } else {
+            fragment = QuizFragment.newInstance(l.getQuestion());
+        }
+        fragmentTransaction.add(R.id.content, fragment);
+        fragmentTransaction.commit();
     }
 
     // TODO: Rename and change types and number of parameters
@@ -61,15 +81,7 @@ public class LearnFragment extends Fragment {
 
         mContent = (LinearLayout) view.findViewById(R.id.learn_container);
 
-        teacher = new Teacher();
-
-        mContent.removeAllViews();
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        QuizFragment fragment = null;
-        fragment = QuizFragment.newInstance(SymbolDict.singleton.getRandom());
-        fragmentTransaction.add(R.id.content, fragment);
-        fragmentTransaction.commit();
+        next();
 
         return view;
     }

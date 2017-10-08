@@ -83,8 +83,9 @@ public class TeacherTest {
         Teacher teacher = new Teacher();
         teacher.setDict(dict);
 
-        for (int i = 0; i < 20000; i++) {
+        for (int i = 0; i < 274; i++) {
             handleTask(teacher.nextTask(), true);
+
         }
         for (Teacher.LearningSymbol s : teacher.getSymbols()) {
             assertTrue(s.getSymbol().getSymbols().get(0) + ":" + s.getProficiency(), s.getProficiency() >= 0.99);
@@ -97,14 +98,14 @@ public class TeacherTest {
         Teacher teacher = new Teacher();
         teacher.setDict(dict);
 
-        for (int i = 0; i < 20000; i++) {
+        for (int i = 0; i < 274; i++) {
             handleTask(teacher.nextTask(), true);
         }
         for (Teacher.LearningSymbol s : teacher.getSymbols()) {
             assertTrue(s.getProficiency() >= 1);
         }
 
-        for (int i = 0; i < 20000; i++) {
+        for (int i = 0; i < 5000; i++) {
             handleTask(teacher.nextTask(), false);
         }
 
