@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
                     if (i == R.id.navigation_dict)
                         return true;
                     i = R.id.navigation_dict;
-                    fragment = InfoFragment.newInstance(teacher.getSymbols().get(0).getSymbol(), false);
+                    //fragment = InfoFragment.newInstance(teacher.getSymbols().get(0).getSymbol(), false);
+                    fragment = DictSymbolFragment.newInstance(1);
                     break;
                 case R.id.navigation_learn:
                     if (i == R.id.navigation_learn)

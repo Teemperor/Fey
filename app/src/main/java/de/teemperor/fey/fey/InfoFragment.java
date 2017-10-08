@@ -36,21 +36,11 @@ public class InfoFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private String joinString(String s, List<String> items) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < items.size(); i++) {
-            result.append(items.get(i));
-            if (i < items.size() - 1) {
-               result.append(s);
-            }
-        }
-        return result.toString();
-    }
     private void setSymbol(Symbol r) {
-        String symbolText = joinString(", ", r.getSymbols());
+        String symbolText = Utils.joinString(", ", r.getSymbols());
         symbol.setText(symbolText);
-        meanings.setText("• " + joinString("\n• ", r.getMeanings()));
-        readings.setText("• " + joinString("\n• ", r.getReadings()));
+        meanings.setText("• " + Utils.joinString("\n• ", r.getMeanings()));
+        readings.setText("• " + Utils.joinString("\n• ", r.getReadings()));
     }
 
     /**

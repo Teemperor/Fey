@@ -31,4 +31,8 @@ public class Symbol {
     public int getUid() {
         return uid;
     }
+
+    public String getSymbolString() {
+        return Utils.joinString(", ", getSymbols());
+    }
 }
