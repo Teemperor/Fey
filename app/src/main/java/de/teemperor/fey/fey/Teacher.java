@@ -141,17 +141,5 @@ public class Teacher {
             }
         }
         throw new RuntimeException("Run out of weights?");
-
-
-//        if (s.getProficiency() >= 1)
-//            continue;
-//        if (!s.isIntroduced()) {
-//            s.setIntroduced(true);
-//            return new LearnTask(s.getSymbol());
-//        }
-//        if (s != lastLearned) {
-//            possibleSymbols.add(s);
-//        }
-        //return new LearnTask(makeQuestion(symbols.get(index)));
     }
 }
