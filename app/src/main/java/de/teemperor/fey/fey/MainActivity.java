@@ -19,41 +19,45 @@ public class MainActivity extends AppCompatActivity {
 
     static Teacher teacher = new Teacher();
 
-    int i = -1;
+    int currentView = -1;
+
+    public boolean switchView(int id) {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment fragment = null;
+        switch (id) {
+            case R.id.navigation_dict:
+                if (currentView == R.id.navigation_dict)
+                    return true;
+                currentView = R.id.navigation_dict;
+                //fragment = InfoFragment.newInstance(teacher.getSymbols().get(0).getSymbol(), false);
+                fragment = DictSymbolFragment.newInstance(1);
+                break;
+            case R.id.navigation_learn:
+                if (currentView == R.id.navigation_learn)
+                    return true;
+                currentView = R.id.navigation_learn;
+                fragment = LearnFragment.newInstance("a", "b");
+                break;
+            case R.id.navigation_settings:
+                if (currentView == R.id.navigation_settings)
+                    return true;
+                currentView = R.id.navigation_settings;
+                fragment = SettingsFragment.newInstance("a", "b");
+                break;
+        }
+        fragmentTransaction.add(R.id.content, fragment);
+        mContent.removeAllViews();
+        fragmentTransaction.commit();
+        return true;
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            Fragment fragment = null;
-            switch (item.getItemId()) {
-                case R.id.navigation_dict:
-                    if (i == R.id.navigation_dict)
-                        return true;
-                    i = R.id.navigation_dict;
-                    //fragment = InfoFragment.newInstance(teacher.getSymbols().get(0).getSymbol(), false);
-                    fragment = DictSymbolFragment.newInstance(1);
-                    break;
-                case R.id.navigation_learn:
-                    if (i == R.id.navigation_learn)
-                        return true;
-                    i = R.id.navigation_learn;
-                    fragment = LearnFragment.newInstance("a", "b");
-                    break;
-                case R.id.navigation_settings:
-                    if (i == R.id.navigation_settings)
-                        return true;
-                    i = R.id.navigation_settings;
-                    fragment = SettingsFragment.newInstance("a", "b");
-                    break;
-            }
-            fragmentTransaction.add(R.id.content, fragment);
-            mContent.removeAllViews();
-            fragmentTransaction.commit();
-            return true;
+            return switchView(item.getItemId());
         }
 
     };
@@ -76,6 +80,10 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         mContent = (FrameLayout) findViewById(R.id.content);
+
+        navigation.setSelectedItemId(R.id.navigation_learn);
+
+        switchView(R.id.navigation_learn);
     }
 
 }

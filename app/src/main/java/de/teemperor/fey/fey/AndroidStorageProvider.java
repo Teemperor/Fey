@@ -2,9 +2,9 @@ package de.teemperor.fey.fey;
 
 import android.content.Context;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class AndroidStorageProvider implements StorageProvider{
 
@@ -14,7 +14,7 @@ public class AndroidStorageProvider implements StorageProvider{
         this.context = context;
     }
 
-    public FileOutputStream getOutput(String fileName) {
+    public OutputStream getOutput(String fileName) {
         try {
             return context.openFileOutput(fileName, Context.MODE_PRIVATE);
         } catch (FileNotFoundException e) {
@@ -24,7 +24,7 @@ public class AndroidStorageProvider implements StorageProvider{
     }
 
     @Override
-    public FileInputStream getInput(String fileName) throws FileNotFoundException {
+    public InputStream getInput(String fileName) throws FileNotFoundException {
         return context.openFileInput(fileName);
     }
 }

@@ -1,10 +1,10 @@
 package de.teemperor.fey.fey;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public interface StorageProvider {
-    FileOutputStream getOutput(String fileName);
-    FileInputStream getInput(String fileName) throws FileNotFoundException;
+    OutputStream getOutput(String fileName);
+    InputStream getInput(String fileName) throws FileNotFoundException;
 }
